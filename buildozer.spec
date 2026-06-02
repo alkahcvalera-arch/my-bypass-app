@@ -9,9 +9,9 @@ requirements = python3,kivy
 android.permissions = INTERNET
 orientation = portrait
 
+# Фиксируем API и Build Tools
 android.api = 33
 android.minapi = 21
-# Убираем android.ndk, чтобы он не пытался качать его сам
 android.build_tools_version = 33.0.0
 
 [buildozer]
