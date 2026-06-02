@@ -11,9 +11,6 @@ orientation = portrait
 
 android.api = 33
 android.minapi = 21
-# Фиксируем версию NDK, которую просит лог
-android.ndk = 28.0.13004108
-android.build_tools_version = 33.0.0
 
 [buildozer]
 log_level = 2
