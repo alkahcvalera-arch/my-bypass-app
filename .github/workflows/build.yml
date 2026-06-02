@@ -21,19 +21,23 @@ jobs:
           sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo6 cmake libffi-dev libssl-dev
           pip install --upgrade buildozer cython
 
-      - name: Build
-        env:
-          ANDROID_HOME: /usr/local/lib/android/sdk
-          # Используем версию 28c, так как p4a сам её запросил
-          ANDROID_NDK_HOME: /usr/local/lib/android/sdk/ndk/28.0.13004108
+      - name: Setup Android SDK/NDK
         run: |
-          # ОБМАНЫВАЕМ buildozer: создаем ссылку там, где он ищет sdkmanager
-          mkdir -p /usr/local/lib/android/sdk/tools/bin
-          ln -s /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager /usr/local/lib/android/sdk/tools/bin/sdkmanager
+          # Создаем структуру .buildozer вручную, чтобы он ничего не качал
+          mkdir -p .buildozer/android/platform/android-sdk
+          mkdir -p .buildozer/android/platform/android-ndk-r28c
           
-          # Очистка и запуск
-          rm -rf .buildozer
-          buildozer android debug
+          # Копируем системные инструменты в папку билдозера
+          cp -r /usr/local/lib/android/sdk/platforms .buildozer/android/platform/android-sdk/
+          cp -r /usr/local/lib/android/sdk/build-tools .buildozer/android/platform/android-sdk/
+          cp -r /usr/local/lib/android/sdk/platform-tools .buildozer/android/platform/android-sdk/
+          
+          # Указываем buildozer использовать ЭТУ папку
+          echo "export ANDROID_HOME=$PWD/.buildozer/android/platform/android-sdk" >> $GITHUB_ENV
+          echo "export ANDROID_NDK_HOME=/usr/local/lib/android/sdk/ndk/28.0.13004108" >> $GITHUB_ENV
+
+      - name: Build
+        run: buildozer android debug
 
       - name: Upload
         uses: actions/upload-artifact@v4
