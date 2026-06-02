@@ -22,16 +22,12 @@ jobs:
           pip install --upgrade buildozer cython
 
       - name: Build
+        env:
+          # Указываем buildozer, что SDK и NDK уже установлены в системе
+          ANDROID_HOME: /usr/local/lib/android/sdk
+          ANDROID_NDK_HOME: /usr/local/lib/android/sdk/ndk/27.3.13750724
         run: |
-          # Создаем структуру папок, которую ищет Buildozer
-          mkdir -p /home/runner/.buildozer/android/platform/android-sdk
-          
-          # Ссылаемся на системный Android SDK, который уже есть на сервере
-          ln -s /usr/local/lib/android/sdk/build-tools /home/runner/.buildozer/android/platform/android-sdk/build-tools
-          ln -s /usr/local/lib/android/sdk/platforms /home/runner/.buildozer/android/platform/android-sdk/platforms
-          ln -s /usr/local/lib/android/sdk/platform-tools /home/runner/.buildozer/android/platform/android-sdk/platform-tools
-          
-          # Запуск сборки
+          # Запускаем сборку
           buildozer android debug
 
       - name: Upload
