@@ -23,16 +23,15 @@ jobs:
 
       - name: Build
         env:
-          # Указываем пути к стандартному SDK на GitHub
+          # Принудительные пути к SDK/NDK
           ANDROID_HOME: /usr/local/lib/android/sdk
           ANDROID_NDK_HOME: /usr/local/lib/android/sdk/ndk/27.3.13750724
-          # Это заставляет buildozer не скачивать ничего лишнего
-          BUILDOZER_ALLOW_SDK_DOWNLOAD: 1
+          ANDROID_SDK_HOME: /usr/local/lib/android/sdk
         run: |
-          # Автоматическое принятие лицензий
+          # Принимаем лицензии для всех компонентов
           mkdir -p ~/.android
           touch ~/.android/repositories.cfg
-          echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
           
           # Очистка
           rm -rf .buildozer
