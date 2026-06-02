@@ -22,11 +22,18 @@ jobs:
           pip install --upgrade buildozer cython
 
       - name: Build
+        env:
+          # Отключаем попытки buildozer что-то качать или устанавливать
+          BUILDOZER_ALLOW_SDK_DOWNLOAD: 0
+          # Указываем реальные пути, где лежат инструменты на Ubuntu 22.04
+          ANDROID_HOME: /usr/local/lib/android/sdk
+          ANDROID_NDK_HOME: /usr/local/lib/android/sdk/ndk/25.2.9519653
         run: |
-          # Убираем все попытки buildozer лезть в сеть
+          # Убеждаемся, что переменные среды видны
           export ANDROID_HOME=/usr/local/lib/android/sdk
+          export ANDROID_NDK_HOME=/usr/local/lib/android/sdk/ndk/25.2.9519653
           
-          # Запуск сборки
+          # Запуск
           buildozer android debug
 
       - name: Upload
