@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
 
@@ -21,23 +21,12 @@ jobs:
           sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo6 cmake libffi-dev libssl-dev
           pip install --upgrade buildozer cython
 
-      - name: Create SDK Symlinks
-        run: |
-          # Создаем структуру, которую ищет P4A
-          sudo mkdir -p /usr/local/lib/android/sdk/tools/bin
-          # Создаем ссылку на реальный sdkmanager
-          sudo ln -s /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager /usr/local/lib/android/sdk/tools/bin/sdkmanager
-
       - name: Build
-        env:
-          ANDROID_HOME: /usr/local/lib/android/sdk
-          ANDROID_NDK_HOME: /usr/local/lib/android/sdk/ndk/28.0.13004108
-          # Говорим P4A, что мы уже приняли лицензии
-          # (создаем пустой файл, который он ищет)
-          ANDROID_SDK_HOME: /home/runner/
         run: |
-          mkdir -p /home/runner/.android
-          touch /home/runner/.android/repositories.cfg
+          # Убираем все попытки buildozer лезть в сеть
+          export ANDROID_HOME=/usr/local/lib/android/sdk
+          
+          # Запуск сборки
           buildozer android debug
 
       - name: Upload
