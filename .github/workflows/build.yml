@@ -21,12 +21,22 @@ jobs:
           sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo6 cmake libffi-dev libssl-dev
           pip install --upgrade buildozer cython
 
-      - name: Build
+      - name: Accept Licenses and Build
         run: |
-          # Указываем Buildozer'у использовать NDK, который уже есть на сервере
-          export ANDROID_NDK_HOME=/usr/local/lib/android/sdk/ndk/27.3.13750724
-          export ANDROID_SDK_HOME=/usr/local/lib/android/sdk
+          # Создаем пустой файл лицензий, чтобы sdkmanager не спрашивал ничего
+          mkdir -p ~/.android
+          touch ~/.android/repositories.cfg
+          
+          # Автоматически принимаем все лицензии
+          export ANDROID_HOME=/usr/local/lib/android/sdk
+          yes | sdkmanager --licenses || true
           
           # Очистка и запуск
           rm -rf .buildozer
           buildozer android debug
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: package
+          path: bin/*.apk
