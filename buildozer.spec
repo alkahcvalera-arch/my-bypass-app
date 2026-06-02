@@ -9,11 +9,10 @@ requirements = python3,kivy
 android.permissions = INTERNET
 orientation = portrait
 
-# Эти параметры критичны для того, чтобы сборка не падала
 android.api = 33
 android.minapi = 21
+# Важно: фиксируем версии, чтобы он не искал 37-ю
 android.build_tools_version = 33.0.0
-# Не указываем здесь android.ndk, чтобы использовался системный из YAML
 
 [buildozer]
 log_level = 2
