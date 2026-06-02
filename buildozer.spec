@@ -11,7 +11,6 @@ orientation = portrait
 
 android.api = 33
 android.minapi = 21
-# Указываем версии явно
 android.ndk = 25.2.9519653
 android.build_tools_version = 33.0.0
 
