@@ -23,11 +23,9 @@ jobs:
 
       - name: Build with Buildozer
         run: |
-          # Автоматическое принятие лицензий Android SDK
+          # Автоматически принимаем лицензии
           mkdir -p ~/.android
           touch ~/.android/repositories.cfg
-          
-          # Запуск сборки
           buildozer android debug
 
       - name: Upload artifacts
