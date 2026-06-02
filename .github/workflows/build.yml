@@ -21,15 +21,23 @@ jobs:
           sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo6 cmake libffi-dev libssl-dev
           pip install --upgrade buildozer cython
 
+      - name: Create SDK Symlinks
+        run: |
+          # Создаем структуру, которую ищет P4A
+          sudo mkdir -p /usr/local/lib/android/sdk/tools/bin
+          # Создаем ссылку на реальный sdkmanager
+          sudo ln -s /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager /usr/local/lib/android/sdk/tools/bin/sdkmanager
+
       - name: Build
         env:
-          # Жесткие переменные, которые подавляют авто-скачивание
           ANDROID_HOME: /usr/local/lib/android/sdk
-          ANDROID_NDK_HOME: /usr/local/lib/android/sdk/ndk/27.3.13750724
-          # ВАЖНО: говорим buildozer не проверять наличие sdkmanager
-          BUILDOZER_SKIP_SDK_INSTALL: 1
+          ANDROID_NDK_HOME: /usr/local/lib/android/sdk/ndk/28.0.13004108
+          # Говорим P4A, что мы уже приняли лицензии
+          # (создаем пустой файл, который он ищет)
+          ANDROID_SDK_HOME: /home/runner/
         run: |
-          # Запуск без удаления папки .buildozer
+          mkdir -p /home/runner/.android
+          touch /home/runner/.android/repositories.cfg
           buildozer android debug
 
       - name: Upload
