@@ -21,32 +21,14 @@ jobs:
           sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo6 cmake libffi-dev libssl-dev
           pip install --upgrade buildozer cython
 
-      - name: Fix SDK Paths and Build
+      - name: Build
         run: |
-          # Создаем структуру папок
-          mkdir -p /home/runner/.buildozer/android/platform/android-sdk
+          # Очистка среды для исключения старых конфликтов
+          rm -rf .buildozer
           
-          # Скачиваем и распаковываем актуальные cmdline-tools
-          wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O /tmp/tools.zip
-          unzip -q /tmp/tools.zip -d /tmp/cmdline-tools
+          # Установка переменных
+          export ANDROID_HOME=/usr/local/lib/android/sdk
+          export ANDROID_NDK_HOME=/usr/local/lib/android/sdk/ndk/25.1.8937393
           
-          # Перемещаем в нужное место
-          mkdir -p /home/runner/.buildozer/android/platform/android-sdk/cmdline-tools/latest
-          mv /tmp/cmdline-tools/cmdline-tools/* /home/runner/.buildozer/android/platform/android-sdk/cmdline-tools/latest/
-          
-          # СОЗДАЕМ ССЫЛКУ, чтобы buildozer нашел sdkmanager
-          mkdir -p /home/runner/.buildozer/android/platform/android-sdk/tools/bin
-          ln -s /home/runner/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager /home/runner/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager
-          
-          # Принимаем лицензии
-          export PATH=$PATH:/home/runner/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin
-          yes | sdkmanager --licenses
-          
-          # Запуск сборки
+          # Сборка
           buildozer android debug
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: package
-          path: bin/*.apk
