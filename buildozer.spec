@@ -11,8 +11,11 @@ orientation = portrait
 
 android.api = 33
 android.minapi = 21
-# Указываем версию, которая гарантированно есть в системном SDK
 android.build_tools_version = 33.0.0
+
+# Указываем пути к системным папкам, чтобы он не искал их в .buildozer
+android.sdk_path = /usr/local/lib/android/sdk
+android.ndk_path = /usr/local/lib/android/sdk/ndk/27.3.13750724
 
 [buildozer]
 log_level = 2
