@@ -21,23 +21,16 @@ jobs:
           sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo6 cmake libffi-dev libssl-dev
           pip install --upgrade buildozer cython
 
-      - name: Setup Android SDK/NDK
-        run: |
-          # Создаем структуру .buildozer вручную, чтобы он ничего не качал
-          mkdir -p .buildozer/android/platform/android-sdk
-          mkdir -p .buildozer/android/platform/android-ndk-r28c
-          
-          # Копируем системные инструменты в папку билдозера
-          cp -r /usr/local/lib/android/sdk/platforms .buildozer/android/platform/android-sdk/
-          cp -r /usr/local/lib/android/sdk/build-tools .buildozer/android/platform/android-sdk/
-          cp -r /usr/local/lib/android/sdk/platform-tools .buildozer/android/platform/android-sdk/
-          
-          # Указываем buildozer использовать ЭТУ папку
-          echo "export ANDROID_HOME=$PWD/.buildozer/android/platform/android-sdk" >> $GITHUB_ENV
-          echo "export ANDROID_NDK_HOME=/usr/local/lib/android/sdk/ndk/28.0.13004108" >> $GITHUB_ENV
-
       - name: Build
-        run: buildozer android debug
+        env:
+          # Жесткие переменные, которые подавляют авто-скачивание
+          ANDROID_HOME: /usr/local/lib/android/sdk
+          ANDROID_NDK_HOME: /usr/local/lib/android/sdk/ndk/27.3.13750724
+          # ВАЖНО: говорим buildozer не проверять наличие sdkmanager
+          BUILDOZER_SKIP_SDK_INSTALL: 1
+        run: |
+          # Запуск без удаления папки .buildozer
+          buildozer android debug
 
       - name: Upload
         uses: actions/upload-artifact@v4
