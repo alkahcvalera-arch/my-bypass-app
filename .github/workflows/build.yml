@@ -21,22 +21,14 @@ jobs:
           sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo6 cmake libffi-dev libssl-dev
           pip install --upgrade buildozer cython
 
-      - name: Fix SDK Structure
-        run: |
-          # Создаем структуру, которую P4A ищет по ошибке
-          sudo mkdir -p /usr/local/lib/android/sdk/tools/bin
-          # Создаем символическую ссылку на настоящий sdkmanager
-          sudo ln -s /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager /usr/local/lib/android/sdk/tools/bin/sdkmanager
-          # Принимаем лицензии заранее
-          mkdir -p ~/.android
-          touch ~/.android/repositories.cfg
-          yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --licenses
-
       - name: Build
         env:
           ANDROID_HOME: /usr/local/lib/android/sdk
           ANDROID_NDK_HOME: /usr/local/lib/android/sdk/ndk/25.2.9519653
+          # ЭТА ПЕРЕМЕННАЯ ЗАПРЕЩАЕТ P4A ЛЕЗТЬ В ИНТЕРНЕТ ЗА SDK
+          P4A_SDK_ROOT: /usr/local/lib/android/sdk
         run: |
+          # Прямой вызов сборки
           buildozer android debug
 
       - name: Upload
