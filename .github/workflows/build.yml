@@ -23,9 +23,8 @@ jobs:
 
       - name: Build with Buildozer
         run: |
-          # Очистка старых, возможно битых файлов SDK
-          buildozer clean
-          # Запуск сборки
+          # Вместо buildozer clean мы просто запускаем сборку
+          # Buildozer сам создаст нужные папки, если их нет
           buildozer android debug
 
       - name: Upload artifacts
