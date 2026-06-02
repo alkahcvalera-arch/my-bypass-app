@@ -10,9 +10,6 @@ android.permissions = INTERNET
 orientation = portrait
 android.api = 33
 android.minapi = 21
-# Убрали android.sdk, так как он вызывает предупреждение
-android.ndk = 25b
-android.build_tools_version = 33.0.0
 
 [buildozer]
 log_level = 2
