@@ -11,11 +11,10 @@ orientation = portrait
 
 android.api = 33
 android.minapi = 21
-android.build_tools_version = 33.0.0
-
-# Указываем пути к локальным папкам, которые мы создали
-android.sdk_path = .buildozer/android/platform/android-sdk
-android.ndk_path = /usr/local/lib/android/sdk/ndk/28.0.13004108
+# Важно: если здесь не указать ndk, он может попытаться его скачать. 
+# Но с BUILDOZER_SKIP_SDK_INSTALL он будет обязан взять путь из ENV.
+android.ndk_path = /usr/local/lib/android/sdk/ndk/27.3.13750724
+android.sdk_path = /usr/local/lib/android/sdk
 
 [buildozer]
 log_level = 2
