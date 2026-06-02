@@ -23,8 +23,10 @@ jobs:
 
       - name: Build with Buildozer
         run: |
-          # Вместо buildozer clean мы просто запускаем сборку
-          # Buildozer сам создаст нужные папки, если их нет
+          # УДАЛЯЕМ старый кэш, чтобы Buildozer скачал SDK с нуля
+          rm -rf .buildozer
+          
+          # Запускаем сборку
           buildozer android debug
 
       - name: Upload artifacts
