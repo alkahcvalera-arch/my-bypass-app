@@ -11,7 +11,7 @@ orientation = portrait
 
 android.api = 33
 android.minapi = 21
-# Важно: фиксируем версии, чтобы он не искал 37-ю
+# Указываем версию, которая гарантированно есть в системном SDK
 android.build_tools_version = 33.0.0
 
 [buildozer]
