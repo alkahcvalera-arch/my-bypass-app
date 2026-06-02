@@ -8,8 +8,10 @@ version = 0.1
 requirements = python3,kivy
 android.permissions = INTERNET
 orientation = portrait
+
 android.api = 33
 android.minapi = 21
+android.ndk = 25.1.8937393
 android.build_tools_version = 33.0.0
 
 [buildozer]
