@@ -22,17 +22,11 @@ jobs:
           pip install --upgrade buildozer cython
 
       - name: Build
-        env:
-          # Эти переменные заставляют Buildozer использовать установленные SDK в GitHub
-          ANDROID_HOME: /usr/local/lib/android/sdk
-          ANDROID_NDK_HOME: /usr/local/lib/android/sdk/ndk/25.2.9519653
         run: |
+          # Указываем Buildozer'у использовать NDK, который уже есть на сервере
+          export ANDROID_NDK_HOME=/usr/local/lib/android/sdk/ndk/27.3.13750724
+          export ANDROID_SDK_HOME=/usr/local/lib/android/sdk
+          
+          # Очистка и запуск
           rm -rf .buildozer
-          # Запуск сборки без попытки скачать то, что мы уже указали
           buildozer android debug
-
-      - name: Upload
-        uses: actions/upload-artifact@v4
-        with:
-          name: package
-          path: bin/*.apk
