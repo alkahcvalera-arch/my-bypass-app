@@ -21,12 +21,24 @@ jobs:
           sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo6 cmake libffi-dev libssl-dev
           pip install --upgrade buildozer cython
 
+      - name: Install Android SDK Components
+        run: |
+          # Создаем структуру папок
+          mkdir -p /home/runner/.buildozer/android/platform/android-sdk
+          
+          # Устанавливаем cmdline-tools вручную (это база для работы sdkmanager)
+          wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdline-tools.zip
+          unzip cmdline-tools.zip -d /tmp/cmdline-tools
+          mkdir -p /home/runner/.buildozer/android/platform/android-sdk/cmdline-tools/latest
+          mv /tmp/cmdline-tools/cmdline-tools/* /home/runner/.buildozer/android/platform/android-sdk/cmdline-tools/latest/
+          
+          # Принимаем лицензии и устанавливаем build-tools
+          export PATH=$PATH:/home/runner/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin
+          yes | sdkmanager --licenses || true
+          sdkmanager "build-tools;33.0.0" "platforms;android-33" "platform-tools"
+
       - name: Build with Buildozer
         run: |
-          # УДАЛЯЕМ старый кэш, чтобы Buildozer скачал SDK с нуля
-          rm -rf .buildozer
-          
-          # Запускаем сборку
           buildozer android debug
 
       - name: Upload artifacts
