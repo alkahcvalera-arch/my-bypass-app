@@ -11,9 +11,9 @@ orientation = portrait
 
 android.api = 33
 android.minapi = 21
-android.ndk = 25.1.8937393
-android.build_tools_version = 33.0.0
 
-[buildozer]
-log_level = 2
-warn_on_root = 1
+# Используем версию NDK, которая точно есть в репозиториях
+android.ndk = 25.2.9519653
+android.build_tools_version = 33.0.0
+# Явно указываем SDK, чтобы не было 404 ошибки при поиске
+android.sdk = 33
